@@ -60,8 +60,27 @@
 
   const sliderImages = document.querySelectorAll('.slide-in');
 
+// loop over every image and determine where each image should be shown
+
   function checkSlide(e) {
-    console.log(e);
+    console.log(window.scrollY);
+    sliderImages.forEach(sliderImage => {
+    // scrollY is pixel distance down from top of screen
+    // innerHeight is pixel distance up from bottom of screen
+    // half way through the image
+      const slideInAt = (window.scrollY + window.innerHeight) - sliderImage.height / 2;
+    // offsetTop tells us the top of the image, how far it is from the top of actual window
+    // bottom of the image
+      const imageBottom = sliderImage.offsetTop + sliderImage.height;
+      const isHalfShown = slideInAt > sliderImage.offsetTop;
+      const isNotScrolledPast = window.scrollY < imageBottom;
+      if (isHalfShown && isNotScrolledPast) {
+        sliderImage.classList.add('active');
+      } else {
+        sliderImage.classList.remove('active');
+
+      }
+    });
   }
 
   window.addEventListener('scroll', debounce(checkSlide));
